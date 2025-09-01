@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>بنازم</title>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Lalezar&display=swap");
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        background: #0b0b0f;
+        overflow: hidden;
+      }
+      .center-btn {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        padding: 14px 26px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #ff6b6b, #ffb86b);
+        color: #000;
+        font-size: 24px;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+      }
+      .spawned {
+        position: absolute;
+        pointer-events: none;
+        white-space: nowrap;
+        will-change: transform, opacity;
+        animation: floatAway 3s linear forwards;
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+      }
+      @keyframes floatAway {
+        0% {
+          opacity: 1;
+          transform: translateY(0) rotate(0deg) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-80px) rotate(20deg) scale(1.05);
+        }
+      }
+      * {
+        font-family: "Lalezar", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="spawnBtn" class="center-btn">بنازم</button>
+
+    <script>
+      const btn = document.getElementById("spawnBtn");
+      let intervalId = null;
+
+      function rand(min, max) {
+        return Math.random() * (max - min) + min;
+      }
+      function randInt(min, max) {
+        return Math.floor(rand(min, max + 1));
+      }
+      function randomColor() {
+        return `hsl(${randInt(0, 360)} ${rand(55, 95).toFixed(0)}% ${rand(
+          35,
+          75
+        ).toFixed(0)}%)`;
+      }
+
+      function spawnOnce() {
+        const el = document.createElement("div");
+        el.className = "spawned";
+        el.textContent = "بنازم";
+        const size = randInt(14, 64);
+        el.style.fontSize = size + "px";
+        el.style.color = randomColor();
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        const x = rand(0, Math.max(0, w - size * 3));
+        const y = rand(0, Math.max(0, h - size * 1.2));
+        el.style.left = x + "px";
+        el.style.top = y + "px";
+        el.style.transform = `rotate(${rand(-30, 30)}deg)`;
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 3400);
+      }
+
+      btn.addEventListener("click", () => {
+        if (intervalId) {
+          clearInterval(intervalId);
+          intervalId = null;
+          btn.textContent = "بنازم";
+          return;
+        }
+        btn.textContent = "توقف";
+        intervalId = setInterval(spawnOnce, 120);
+      });
+    </script>
+  </body>
+</html>
